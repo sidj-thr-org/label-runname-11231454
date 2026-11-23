@@ -1,0 +1,16 @@
+name: Env override
+on: workflow_dispatch
+permissions: {}
+env:
+  GITHUB_BASE_REF: from-workflow-env
+jobs:
+  job-level:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_BASE_REF: from-job-env
+    steps:
+      - run: echo "RESULT job=[$GITHUB_BASE_REF]"
+      - env:
+          GITHUB_BASE_REF: from-step-env
+        run: echo "RESULT step=[$GITHUB_BASE_REF]"
+      - run: node -e 'console.log("RESULT node=[" + process.env.GITHUB_BASE_REF + "]")'
