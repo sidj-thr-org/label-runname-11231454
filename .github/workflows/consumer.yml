@@ -1,15 +1,19 @@
 name: Consumer
-run-name: "saw ${{ github.event.workflow_run.id }} | ${{ github.event.workflow_run.display_title }}"
+run-name: "saw ${{ github.event.workflow_run.id }}"
 on:
   workflow_run:
     workflows: [PR checks]
     types: [requested]
-permissions: {}
+permissions:
+  actions: read
 jobs:
   show:
     runs-on: ubuntu-latest
     steps:
       - env:
-          TITLE: ${{ github.event.workflow_run.display_title }}
-          KEYS: ${{ join(github.event.workflow_run.*, '') != '' }}
-        run: echo "display_title=$TITLE"
+          GH_TOKEN: ${{ github.token }}
+          ID: ${{ github.event.workflow_run.id }}
+          PAYLOAD: ${{ github.event.workflow_run.display_title }}
+        run: |
+          echo "RESULT payload=[$PAYLOAD]"
+          echo "RESULT api_at_start=[$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$ID" --jq .display_title)]"
