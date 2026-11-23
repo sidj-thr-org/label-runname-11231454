@@ -1,0 +1,12 @@
+name: PR checks
+run-name: >-
+  [${{ github.event.action }}${{ github.event.label.name && format(': {0}', github.event.label.name) || '' }}] ${{ github.event.pull_request.title }}
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+permissions: {}
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok

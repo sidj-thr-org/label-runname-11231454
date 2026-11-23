@@ -1,0 +1,15 @@
+name: Consumer
+run-name: "saw ${{ github.event.workflow_run.id }} | ${{ github.event.workflow_run.display_title }}"
+on:
+  workflow_run:
+    workflows: [PR checks]
+    types: [requested]
+permissions: {}
+jobs:
+  show:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          TITLE: ${{ github.event.workflow_run.display_title }}
+          KEYS: ${{ join(github.event.workflow_run.*, '') != '' }}
+        run: echo "display_title=$TITLE"
